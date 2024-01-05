@@ -1,5 +1,10 @@
-name: Test Action
-on: [push]
+name: Test Database Tool
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
 
 jobs:
   build:
