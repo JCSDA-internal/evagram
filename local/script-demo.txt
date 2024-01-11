@@ -1,2 +1,0 @@
-{"background-image": ["url(\\"data:image/svg+xml)\\""]}
-
