@@ -30,6 +30,6 @@ setuptools.setup(
         'Natural Language :: English',
         'Operating System :: OS Independent'],
     python_requires='>=3.6'
-    )
+)
 
 # --------------------------------------------------------------------------------------------------
