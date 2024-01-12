@@ -1,14 +1,14 @@
 import pickle
 import json
 import os
-import time
+import sys
 import psycopg2
 from dotenv import load_dotenv
 
 load_dotenv()
 
 # can be modified to the file path of experiment data
-EXPERIMENT_DATA_PATH = os.path.join(os.getcwd(),'local')
+EXPERIMENT_DATA_PATH = os.path.join(os.getcwd(),'eva')
 
 # environment variables for connecting to database
 db_host = os.environ.get('DB_HOST')
@@ -28,7 +28,7 @@ def create_tables(cur):
     # Experiments table
     cur.execute("""CREATE TABLE IF NOT EXISTS experiments (
                 experiment_id serial PRIMARY KEY,
-                experiment_name VARCHAR,
+                experiment_name VARCHAR NOT NULL,
                 owner_id INTEGER NOT NULL,
                 CONSTRAINT fk_owner
                     FOREIGN KEY (owner_id)
@@ -39,18 +39,18 @@ def create_tables(cur):
     # Groups table
     cur.execute("""CREATE TABLE IF NOT EXISTS groups (
                 group_id serial PRIMARY KEY,
-                group_name VARCHAR
+                group_name VARCHAR NOT NULL
     )""")
     # Variables table
     cur.execute("""CREATE TABLE IF NOT EXISTS variables (
                 variable_id serial PRIMARY KEY,
-                variable_name VARCHAR,
+                variable_name VARCHAR NOT NULL,
                 channel INTEGER
     )""")
     # Observations table
     cur.execute("""CREATE TABLE IF NOT EXISTS observations (
                 observation_id serial PRIMARY KEY,
-                observation_name VARCHAR,
+                observation_name VARCHAR NOT NULL,
                 variable_id INTEGER NOT NULL,
                 CONSTRAINT fk_variable
                     FOREIGN KEY (variable_id)
@@ -76,7 +76,8 @@ def create_tables(cur):
                 CONSTRAINT fk_observation
                     FOREIGN KEY (observation_id)
                         REFERENCES observations(observation_id)
-                        ON DELETE CASCADE
+                        ON DELETE CASCADE,
+                UNIQUE(experiment_id, group_id, observation_id)
     )""")
 
 def drop_tables(cur):
@@ -111,7 +112,7 @@ def add_user(cur, user_obj):
         print("Skipping current user: needs both owner_id and username")
         return 1
     elif 'first_name' not in user_obj or 'last_name' not in user_obj:
-        cur.execute("INSERT INTO owners (owner_id, username, first_name, last_name) VALUES (%s, %s, %s, %s)", (user_obj["owner_id"], user_obj["username"], user_obj["first_name"], user_obj["last_name"]))
+        cur.execute("INSERT INTO owners (owner_id, username) VALUES (%s, %s)", (user_obj["owner_id"], user_obj["username"]))
     else:
         cur.execute("INSERT INTO owners (owner_id, username, first_name, last_name) VALUES (%s, %s, %s, %s)", (user_obj["owner_id"], user_obj["username"], user_obj["first_name"], user_obj["last_name"]))
     return 0
@@ -168,9 +169,8 @@ def add_plot(cur, plot_obj, observation_dirs):
 
 
 if __name__ == "__main__":
-    t1 = time.time()
-    eva_dir_path = EXPERIMENT_DATA_PATH
-    # observation_dirs = [f for f in os.listdir(eva_dir_path) if os.path.isdir(os.path.join(eva_dir_path, f))]
+    if len(sys.argv) > 1:
+        EXPERIMENT_DATA_PATH = sys.argv[1]
 
     conn = psycopg2.connect(
         host=db_host,
@@ -184,19 +184,6 @@ if __name__ == "__main__":
     drop_tables(cur)
     create_tables(cur)
     load_dataset_to_db(cur)
-
-    # count = 0
-    # for observation in observation_dirs:
-    #     obs_dir_path = os.path.join(eva_dir_path, observation)
-    #     for plot in os.listdir(obs_dir_path):
-            # file_path = os.path.join(obs_dir_path, experiment)
-            # file_name = os.path.splitext(file_path)[0]
-            # file_extension = os.path.splitext(file_path)[1]
-            # if file_extension == '.pkl':
-            #     count += 1
-
-    # t2 = time.time()
-    # print("seconds to scan and insert {} files: {}".format(count, t2-t1))
 
     conn.commit()
     cur.close()

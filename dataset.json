@@ -117,7 +117,6 @@
     ],
     "observation_dirs": [
         "amsua_aqua",
-        "amsua_metop-b",
         "amsua_n18",
         "cris-fsr_n20",
         "satwind"

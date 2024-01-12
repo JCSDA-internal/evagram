@@ -38,13 +38,13 @@ class TestDatabaseInputTool(unittest.TestCase):
         self.cur.close()
 
     def test_InsertOwnerExpected(self):
-        self.cur.execute("INSERT INTO owners (username) VALUES (%s)", ("jdoe",))
+        self.cur.execute("INSERT INTO owners (username, first_name, last_name) VALUES (%s, %s, %s)", ("jdoe", "John", "Doe"))
         self.cur.execute("SELECT (username) FROM owners WHERE username=%s", ("jdoe",))
         assert len(self.cur.fetchall()) == 1
 
     def test_InsertSameOwner(self):
         with self.assertRaises(psycopg2.errors.UniqueViolation):
-            self.cur.execute("INSERT INTO owners (username) VALUES (%s)", ("bzhu",))
+            self.cur.execute("INSERT INTO owners (username, first_name, last_name) VALUES (%s, %s, %s)", ("bzhu", "Brandon", "Zhu"))
     
     def test_InsertOwnerNoUsername(self):
         with self.assertRaises(psycopg2.errors.NotNullViolation):
@@ -82,8 +82,8 @@ class TestDatabaseInputTool(unittest.TestCase):
         assert len(self.cur.fetchall()) == 0
 
     def test_InsertPlotExpected(self):
-        self.cur.execute("INSERT INTO plots (plot_id, experiment_id, group_id, observation_id) VALUES (%s, %s, %s, %s)", (122, 12, 1, 1))
-        self.cur.execute("SELECT (plot_id) FROM plots WHERE plot_id=%s", (122,))
+        self.cur.execute("INSERT INTO plots (plot_id, experiment_id, group_id, observation_id) VALUES (%s, %s, %s, %s)", (115, 1, 4, 5))
+        self.cur.execute("SELECT (plot_id) FROM plots WHERE plot_id=%s", (115,))
         assert len(self.cur.fetchall()) == 1
     
     def test_InsertPlotWithoutExperimentGroupOrObservation(self):
