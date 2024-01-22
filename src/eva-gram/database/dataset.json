@@ -4,39 +4,25 @@
             "owner_id": 1,
             "first_name": "Brandon",
             "last_name": "Zhu",
-            "username": "bzhu",
-            "experiments": [
-                12
-            ]
+            "username": "bzhu"
         },
         {
             "owner_id": 2,
             "first_name": "Tariq",
             "last_name": "Hamzey",
-            "username": "thamzey",
-            "experiments": [
-                3
-            ]
+            "username": "thamzey"
         },
         {
             "owner_id": 3,
             "first_name": "Akira",
             "last_name": "Sewnath",
-            "username": "asewnath",
-            "experiments": [
-                1,
-                96
-            ]
+            "username": "asewnath"
         },
         {
             "owner_id": 4,
             "first_name": "Dan",
             "last_name": "Holdaway",
-            "username": "dholdaway",
-            "experiments": [
-                7,
-                18
-            ]
+            "username": "dholdaway"
         }
     ],
     "experiments": [
@@ -74,42 +60,42 @@
     "plots": [
         {
             "plot_id": 121,
-            "plot_file": "brightnessTemperature_4_e_effectiveerror-vs-gsifinalerror.pkl",
+            "plot_file": "brightnessTemperature_4_effectiveerror-vs-gsifinalerror.pkl",
             "experiment_id": 12,
             "group_id": 1,
             "observation_id": 1
         },
         {
             "plot_id": 322,
-            "plot_file": "brightnessTemperature_10_b_hofx-vs-gsihofxbc.pkl",
+            "plot_file": "brightnessTemperature_10_hofx-vs-gsihofxbc.pkl",
             "experiment_id": 3,
             "group_id": 2,
             "observation_id": 2
         },
         {
             "plot_id": 323,
-            "plot_file": "brightnessTemperature_8_b_hofx-vs-gsihofxbc.pkl",
+            "plot_file": "brightnessTemperature_8_hofx-vs-gsihofxbc.pkl",
             "experiment_id": 3,
             "group_id": 3,
             "observation_id": 3
         },
         {
             "plot_id": 114,
-            "plot_file": "brightnessTemperature_8_e_effectiveerror-vs-gsifinalerror.pkl",
+            "plot_file": "brightnessTemperature_8_effectiveerror-vs-gsifinalerror.pkl",
             "experiment_id": 1,
             "group_id": 4,
             "observation_id": 4
         },
         {
             "plot_id": 165,
-            "plot_file": "brightnessTemperature_86_e_effectiveerror-vs-gsifinalerror.pkl",
+            "plot_file": "brightnessTemperature_86_effectiveerror-vs-gsifinalerror.pkl",
             "experiment_id": 1,
             "group_id": 5,
             "observation_id": 5
         },
         {
             "plot_id": 966,
-            "plot_file": "windEastward_c_hofxdiff-vs-gsihofx.pkl",
+            "plot_file": "windEastward_hofxdiff-vs-gsihofx.pkl",
             "experiment_id": 96,
             "group_id": 6,
             "observation_id": 6
