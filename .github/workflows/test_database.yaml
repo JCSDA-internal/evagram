@@ -43,13 +43,13 @@ jobs:
           DB_PASSWORD: ${{secrets.DB_PASSWORD}}
         run: |
           export PGPASSWORD=$DB_PASSWORD
-          psql -h $DB_HOST -U $DB_USER -d $DB_NAME -a -f ./src/eva-gram/src/database/sql/proc_create_owners.sql
-          psql -h $DB_HOST -U $DB_USER -d $DB_NAME -a -f ./src/eva-gram/src/database/sql/proc_create_experiments.sql
-          psql -h $DB_HOST -U $DB_USER -d $DB_NAME -a -f ./src/eva-gram/src/database/sql/proc_create_groups.sql
-          psql -h $DB_HOST -U $DB_USER -d $DB_NAME -a -f ./src/eva-gram/src/database/sql/proc_create_plots.sql
-          psql -h $DB_HOST -U $DB_USER -d $DB_NAME -a -f ./src/eva-gram/src/database/sql/proc_create_variables.sql
-          psql -h $DB_HOST -U $DB_USER -d $DB_NAME -a -f ./src/eva-gram/src/database/sql/proc_create_observations.sql
-          psql -h $DB_HOST -U $DB_USER -d $DB_NAME -a -f ./src/eva-gram/src/database/sql/proc_create_observation_variable.sql
+          psql -h $DB_HOST -U $DB_USER -d $DB_NAME -a -f ./src/eva-gram/database/sql/proc_create_owners.sql
+          psql -h $DB_HOST -U $DB_USER -d $DB_NAME -a -f ./src/eva-gram/database/sql/proc_create_experiments.sql
+          psql -h $DB_HOST -U $DB_USER -d $DB_NAME -a -f ./src/eva-gram/database/sql/proc_create_groups.sql
+          psql -h $DB_HOST -U $DB_USER -d $DB_NAME -a -f ./src/eva-gram/database/sql/proc_create_plots.sql
+          psql -h $DB_HOST -U $DB_USER -d $DB_NAME -a -f ./src/eva-gram/database/sql/proc_create_variables.sql
+          psql -h $DB_HOST -U $DB_USER -d $DB_NAME -a -f ./src/eva-gram/database/sql/proc_create_observations.sql
+          psql -h $DB_HOST -U $DB_USER -d $DB_NAME -a -f ./src/eva-gram/database/sql/proc_create_observation_variable.sql
 
       - name: Run Input Tool
         env:
@@ -58,7 +58,7 @@ jobs:
           DB_NAME: ${{secrets.DB_NAME}}
           DB_USER: ${{secrets.DB_USER}}
           DB_PASSWORD: ${{secrets.DB_PASSWORD}}
-        run: python ./src/eva-gram/src/database/input_tool.py ./tests/eva
+        run: python ./src/eva-gram/database/input_tool.py ./tests/eva
 
       - name: Run Test Script
         env:
