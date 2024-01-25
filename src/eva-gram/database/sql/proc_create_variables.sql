@@ -9,7 +9,8 @@ AS $BODY$
 CREATE TABLE IF NOT EXISTS variables (
 	variable_id serial PRIMARY KEY,
 	variable_name VARCHAR NOT NULL,
-	channel INTEGER
+	channel INTEGER,
+	UNIQUE(variable_name, channel)
 );
 $BODY$;
 ALTER PROCEDURE public.create_variables()

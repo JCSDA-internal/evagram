@@ -132,8 +132,8 @@ class TestDatabaseInputTool(unittest.TestCase):
         plot_obj = {
             "plot_id": 115,
             "experiment_id": 1,
-            "group_id": 4,
-            "observation_id": 5
+            "group_id": 3,
+            "observation_id": 2
         }
         input_tool.insert_table_record(self.cur, plot_obj, "plots")
         self.cur.execute(
@@ -188,30 +188,57 @@ class TestDatabaseInputTool(unittest.TestCase):
 
     def test_InsertObservationExpected(self):
         observation_obj = {
-            "observation_name": "satwind",
-            "variable_id": 1
+            "observation_name": "aircraft"
         }
         input_tool.insert_table_record(self.cur, observation_obj, "observations")
         self.cur.execute(
             """SELECT (observation_id) FROM observations
-            WHERE observation_name=%s AND variable_id=%s""",
-            ("satwind", 1))
+            WHERE observation_name=%s""",
+            ("satwind",))
         assert len(self.cur.fetchall()) == 1
 
-    def test_InsertObservationWithoutVariable(self):
-        with self.assertRaises(psycopg2.errors.NotNullViolation):
-            observation_obj = {
-                "observation_name": "amsua_n19"
-            }
-            input_tool.insert_table_record(self.cur, observation_obj, "observations")
+    def test_InsertNewObservationToExistingVariable(self):
+        observation_obj = {
+            "observation_name": "amsua_n19"
+        }
+        input_tool.insert_table_record(self.cur, observation_obj, "observations")
+        # get existing variable and its variable_id
+        self.cur.execute("SELECT variable_id FROM variables WHERE variable_name=%s AND channel=%s",
+                         ("brightnessTemperature", 4))
+        variable_id = self.cur.fetchone()[0]
 
-    def test_InsertObservationWithVariableNotFound(self):
-        with self.assertRaises(psycopg2.errors.ForeignKeyViolation):
+        # get inserted observation and its observation_id
+        self.cur.execute("SELECT observation_id FROM observations WHERE observation_name=%s",
+                         ("amsua_n19",))
+        observation_id = self.cur.fetchone()[0]
+
+        # establish relationship between observation and variable in junction table
+        observation_variable_obj = {
+            "observation_id": observation_id,
+            "variable_id": variable_id
+        }
+        input_tool.insert_table_record(self.cur, observation_variable_obj, "observation_variable")
+
+        # check if variable exists in observation
+        self.cur.execute("SELECT variable_id FROM observation_variable WHERE observation_id=%s",
+                         (observation_id,))
+        variables = self.cur.fetchall()
+        self.assertTrue((variable_id,) in variables)
+
+    def test_InsertObservationWithSameName(self):
+        with self.assertRaises(psycopg2.errors.UniqueViolation):
             observation_obj = {
-                "observation_name": "amsua_n19",
-                "variable_id": -1
+                "observation_name": "satwind",
             }
             input_tool.insert_table_record(self.cur, observation_obj, "observations")
+    
+    def test_InsertExistingObservationToVariableTwice(self):
+        with self.assertRaises(psycopg2.errors.UniqueViolation):
+            observation_variable_obj = {
+                "observation_id": 1,
+                "variable_id": 1
+            }
+            input_tool.insert_table_record(self.cur, observation_variable_obj, "observation_variable")
 
     def test_FetchExistingPlots(self):
         # get all amsua_n18 plots in experiment "experiment_iv_2" where the user is asewnath

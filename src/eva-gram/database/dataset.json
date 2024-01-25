@@ -61,44 +61,32 @@
         {
             "plot_id": 121,
             "plot_file": "brightnessTemperature_4_effectiveerror-vs-gsifinalerror.pkl",
-            "experiment_id": 12,
-            "group_id": 1,
-            "observation_id": 1
+            "experiment_id": 12
         },
         {
             "plot_id": 322,
             "plot_file": "brightnessTemperature_10_hofx-vs-gsihofxbc.pkl",
-            "experiment_id": 3,
-            "group_id": 2,
-            "observation_id": 2
+            "experiment_id": 3
         },
         {
             "plot_id": 323,
             "plot_file": "brightnessTemperature_8_hofx-vs-gsihofxbc.pkl",
-            "experiment_id": 3,
-            "group_id": 3,
-            "observation_id": 3
+            "experiment_id": 3
         },
         {
             "plot_id": 114,
             "plot_file": "brightnessTemperature_8_effectiveerror-vs-gsifinalerror.pkl",
-            "experiment_id": 1,
-            "group_id": 4,
-            "observation_id": 4
+            "experiment_id": 1
         },
         {
             "plot_id": 165,
             "plot_file": "brightnessTemperature_86_effectiveerror-vs-gsifinalerror.pkl",
-            "experiment_id": 1,
-            "group_id": 5,
-            "observation_id": 5
+            "experiment_id": 1
         },
         {
             "plot_id": 966,
-            "plot_file": "windEastward_hofxdiff-vs-gsihofx.pkl",
-            "experiment_id": 96,
-            "group_id": 6,
-            "observation_id": 6
+            "plot_file": "windEastward_effectiveerrordiff-vs-gsifinalerror.pkl",
+            "experiment_id": 96
         }
     ],
     "observation_dirs": [

@@ -8,7 +8,7 @@ LANGUAGE 'sql'
 AS $BODY$
 CREATE TABLE IF NOT EXISTS groups (
 	group_id serial PRIMARY KEY,
-	group_name VARCHAR NOT NULL
+	group_name VARCHAR NOT NULL UNIQUE
 );
 $BODY$;
 ALTER PROCEDURE public.create_groups()

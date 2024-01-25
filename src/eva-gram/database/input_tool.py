@@ -16,7 +16,7 @@ db_password = os.environ.get('DB_PASSWORD')
 
 # can be modified to the file path of experiment data
 EXPERIMENT_DATA_PATH = './tests/eva/'
-DATASET_PATH = './src/eva-gram/src/database/'
+DATASET_PATH = './src/eva-gram/database/'
 
 
 def create_tables(cur):
@@ -32,6 +32,8 @@ def create_tables(cur):
     cur.execute("CALL public.create_observations();")
     # Plots table
     cur.execute("CALL public.create_plots();")
+    # Observation Variable join table
+    cur.execute("CALL public.create_observation_variable();")
 
 
 def drop_tables(cur):
@@ -41,6 +43,7 @@ def drop_tables(cur):
     cur.execute("DROP TABLE IF EXISTS groups CASCADE")
     cur.execute("DROP TABLE IF EXISTS observations CASCADE")
     cur.execute("DROP TABLE IF EXISTS variables CASCADE")
+    cur.execute("DROP TABLE IF EXISTS observation_variable CASCADE")
 
 
 def load_dataset_to_db(cur):
@@ -112,7 +115,7 @@ def add_experiment(cur, experiment_obj):
 def add_plot(cur, plot_obj, observation_dirs):
     # check not null constraints
     # TODO: plot_id made optional for user to provide
-    required = {'plot_id', 'plot_file', 'experiment_id', 'group_id', 'observation_id'}
+    required = {'plot_id', 'plot_file', 'experiment_id'}
     difference = required.difference(plot_obj)
     if len(difference) > 0:
         print("Missing required columns for plots table: {}".format(difference))
@@ -143,41 +146,67 @@ def add_plot(cur, plot_obj, observation_dirs):
         channel = None
         group_name = plot_components[1]
 
-    # construct variable object
-    variable_obj = {
-        "variable_name": var_name,
-        "channel": channel
-    }
-    insert_table_record(cur, variable_obj, "variables")
-
-    # variables are dynamically generated, require an extra query to get variable_id
+    # insert observation, variable, group dynamically if not exist in database
+    cur.execute("SELECT observation_id FROM observations WHERE observation_name=%s",
+                (observation_name,))
+    new_observation = len(cur.fetchall()) == 0
     cur.execute(
-        """SELECT variable_id FROM variables
-        WHERE variable_name=%s AND (channel=%s OR channel IS NULL)""",
-        (var_name, channel)
-    )
+        """SELECT variable_id FROM variables WHERE variable_name=%s
+        AND (channel=%s OR channel IS NULL)""",
+        (var_name, channel))
+    new_variable = len(cur.fetchall()) == 0
+    cur.execute("SELECT group_id FROM groups WHERE group_name=%s", (group_name,))
+    new_group = len(cur.fetchall()) == 0
 
+    if new_observation:
+        observation_obj = {
+            "observation_name": observation_name,
+        }
+        insert_table_record(cur, observation_obj, "observations")
+
+    if new_variable:
+        variable_obj = {
+            "variable_name": var_name,
+            "channel": channel
+        }
+        insert_table_record(cur, variable_obj, "variables")
+
+    if new_group:
+        group_obj = {
+            "group_name": group_name
+        }
+        insert_table_record(cur, group_obj, "groups")
+
+    # get the observation, variable, group ids
+    cur.execute("SELECT observation_id FROM observations WHERE observation_name=%s",
+                (observation_name,))
+    observation_id = cur.fetchone()[0]
+    cur.execute(
+        """SELECT variable_id FROM variables WHERE variable_name=%s
+        AND (channel=%s OR channel IS NULL)""",
+        (var_name, channel))
     variable_id = cur.fetchone()[0]
-    # construct observation object
-    observation_obj = {
-        "observation_id": plot_obj["observation_id"],
-        "observation_name": observation_name,
-        "variable_id": variable_id
-    }
-    insert_table_record(cur, observation_obj, "observations")
-
-    # construct group object
-    group_obj = {}
-    group_obj["group_id"] = plot_obj["group_id"]
-    group_obj["group_name"] = group_name
-    insert_table_record(cur, group_obj, "groups")
+    cur.execute("SELECT group_id FROM groups WHERE group_name=%s", (group_name,))
+    group_id = cur.fetchone()[0]
 
     # modify plot object
     plot_obj["div"] = div
     plot_obj["script"] = script
+    plot_obj["observation_id"] = observation_id
+    plot_obj["group_id"] = group_id
 
     # insert plot to database
     insert_table_record(cur, plot_obj, "plots")
+
+    # create relationship between observation and variable in join table
+    # only if at least one of them was just inserted
+    if new_observation or new_variable:
+        observation_variable_obj = {
+            "observation_id": observation_id,
+            "variable_id": variable_id
+        }
+        insert_table_record(cur, observation_variable_obj, "observation_variable")
+
     return 0
 
 
