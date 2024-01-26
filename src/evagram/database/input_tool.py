@@ -16,7 +16,7 @@ db_password = os.environ.get('DB_PASSWORD')
 
 # can be modified to the file path of experiment data
 EXPERIMENT_DATA_PATH = './tests/eva/'
-DATASET_PATH = './src/eva-gram/database/'
+DATASET_PATH = './src/evagram/database/'
 
 
 def create_tables(cur):

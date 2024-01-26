@@ -13,7 +13,7 @@ db_name = os.environ.get('DB_NAME')
 db_user = os.environ.get('DB_USER')
 db_password = os.environ.get('DB_PASSWORD')
 
-sys.path.insert(1, "./src/eva-gram/database/")
+sys.path.insert(1, "./src/evagram/database/")
 import input_tool
 
 conn = psycopg2.connect(
