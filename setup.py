@@ -16,9 +16,9 @@ import setuptools
 
 
 setuptools.setup(
-    name='eva-gram',
+    name='evagram',
     author='Community owned code',
-    url='https://github.com/JCSDA-internal/eva-gram',
+    url='https://github.com/JCSDA-internal/evagram',
     package_dir={'': 'src'},
     packages=setuptools.find_packages('src'),
     classifiers=[

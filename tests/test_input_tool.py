@@ -1,3 +1,4 @@
+from evagram.database import input_tool
 import sys
 import unittest
 import psycopg2
@@ -12,9 +13,6 @@ db_port = os.environ.get('DB_PORT')
 db_name = os.environ.get('DB_NAME')
 db_user = os.environ.get('DB_USER')
 db_password = os.environ.get('DB_PASSWORD')
-
-sys.path.insert(1, "./src/evagram/database/")
-import input_tool
 
 conn = psycopg2.connect(
     host=db_host,
