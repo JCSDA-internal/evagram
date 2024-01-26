@@ -229,14 +229,15 @@ class TestDatabaseInputTool(unittest.TestCase):
                 "observation_name": "satwind",
             }
             input_tool.insert_table_record(self.cur, observation_obj, "observations")
-    
+
     def test_InsertExistingObservationToVariableTwice(self):
         with self.assertRaises(psycopg2.errors.UniqueViolation):
             observation_variable_obj = {
                 "observation_id": 1,
                 "variable_id": 1
             }
-            input_tool.insert_table_record(self.cur, observation_variable_obj, "observation_variable")
+            input_tool.insert_table_record(
+                self.cur, observation_variable_obj, "observation_variable")
 
     def test_FetchExistingPlots(self):
         # get all amsua_n18 plots in experiment "experiment_iv_2" where the user is asewnath
