@@ -39,9 +39,9 @@ class Observations(models.Model):
 
 class Owners(models.Model):
     owner_id = models.AutoField(primary_key=True)
-    first_name = models.CharField(blank=True, null=True)
-    last_name = models.CharField(blank=True, null=True)
-    username = models.CharField(unique=True)
+    first_name = models.CharField(null=True)
+    last_name = models.CharField(null=True)
+    username = models.CharField(null=False, unique=True, default="null")
 
     class Meta:
         db_table = 'owners'

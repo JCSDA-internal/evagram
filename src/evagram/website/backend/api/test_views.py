@@ -1,5 +1,4 @@
 from django.test import TestCase
-# from evagram.database import input_tool
 from api.models import Owners, Plots
 
 

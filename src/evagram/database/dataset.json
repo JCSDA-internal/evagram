@@ -61,38 +61,38 @@
         {
             "plot_id": 121,
             "plot_file": "brightnessTemperature_4_effectiveerror-vs-gsifinalerror.pkl",
-            "experiment_id": 12
+            "experiment_id": 12,
+            "observation_name": "amsua_aqua"
         },
         {
             "plot_id": 322,
             "plot_file": "brightnessTemperature_10_hofx-vs-gsihofxbc.pkl",
-            "experiment_id": 12
+            "experiment_id": 12,
+            "observation_name": "amsua_aqua"
         },
         {
             "plot_id": 323,
             "plot_file": "brightnessTemperature_8_hofx-vs-gsihofxbc.pkl",
-            "experiment_id": 3
+            "experiment_id": 3,
+            "observation_name": "amsua_n18"
         },
         {
             "plot_id": 114,
             "plot_file": "brightnessTemperature_8_effectiveerror-vs-gsifinalerror.pkl",
-            "experiment_id": 3
+            "experiment_id": 3,
+            "observation_name": "amsua_n18"
         },
         {
             "plot_id": 165,
             "plot_file": "brightnessTemperature_86_effectiveerror-vs-gsifinalerror.pkl",
-            "experiment_id": 1
+            "experiment_id": 1,
+            "observation_name": "cris-fsr_n20"
         },
         {
             "plot_id": 966,
             "plot_file": "windEastward__effectiveerrordiff-vs-gsifinalerror.pkl",
-            "experiment_id": 96
+            "experiment_id": 96,
+            "observation_name": "satwind"
         }
-    ],
-    "observation_dirs": [
-        "amsua_aqua",
-        "amsua_n18",
-        "cris-fsr_n20",
-        "satwind"
     ]
 }
