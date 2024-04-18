@@ -35,7 +35,5 @@ jobs:
           python -m pip install --upgrade pip
           pip install . -r requirements.txt
 
-      - name: Run Django Model Tests
-        env:
-          DB_PASSWORD: ${{secrets.DB_PASSWORD}}
+      - name: Run Django MVC Tests
         run: python ./src/evagram/website/backend/manage.py test api
