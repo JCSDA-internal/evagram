@@ -1,0 +1,45 @@
+name: Test Evagram Input Module
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+    paths:
+      - src/evagram/website/backend/input_app/**
+      - src/evagram/website/backend/api/models.py
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_PASSWORD: ${{secrets.DB_PASSWORD}}
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Install Evagram Input Module
+        run: |
+          python -m pip install --upgrade pip
+          pip install evagram_input@git+https://github.com/GEOS-ESM/evagram_input@feature/input_tool --upgrade
+
+      - name: Install Dependencies
+        run: pip install . -r requirements.txt
+
+      - name: Run Evagram Input Tests
+        run: python src/evagram/website/backend/manage.py test input_app.test_input_tool
+        env:
+          DB_PASSWORD: ${{secrets.DB_PASSWORD}}

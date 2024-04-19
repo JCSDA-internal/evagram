@@ -1,4 +1,4 @@
-name: Test Database Tool
+name: Test Evagram API
 on:
   pull_request:
     types:
