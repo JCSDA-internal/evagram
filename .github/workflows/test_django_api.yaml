@@ -14,8 +14,6 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_DB: ${{secrets.DB_NAME}}
-          POSTGRES_USER: ${{secrets.DB_USER}}
           POSTGRES_PASSWORD: ${{secrets.DB_PASSWORD}}
         ports:
           - 5432:5432
@@ -35,5 +33,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install . -r requirements.txt
 
-      - name: Run Django MVC Tests
-        run: python ./src/evagram/website/backend/manage.py test api
+      - name: Run Django API Tests
+        run: python src/evagram/website/backend/manage.py test api
+        env:
+          DB_PASSWORD: ${{secrets.DB_PASSWORD}}
