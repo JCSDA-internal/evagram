@@ -32,7 +32,7 @@ class TestEvagramInputTool(TestCase):
 
         owner = Owners.objects.get(username="postgres")
         experiments = Experiments.objects.filter(experiment_name="bad_experiment", owner=owner)
-        self.assertEquals(0, len(experiments))
+        self.assertEqual(0, len(experiments))
         observations = Observations.objects.filter(
             observation_name="airs_aqua").filter(observation_name="eva")
-        self.assertEquals(0, len(observations))
+        self.assertEqual(0, len(observations))
