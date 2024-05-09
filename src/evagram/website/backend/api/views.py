@@ -56,6 +56,53 @@ def get_plot_components(request):
     except ObjectDoesNotExist as e:
         return Response({"error": str(e)}, status=400)
 
+@api_view(['GET'])
+def get_plots_by_field(request):
+    try:
+        owner_id = request.GET["owner_id"]
+        experiment_id = request.GET["experiment_id"]
+        observation_id = request.GET["observation_id"]
+        variable_id = request.GET["variable_id"]
+        group_id = request.GET["group_id"]
+
+        # get plots by owner
+        if experiment_id == "placeholder":
+            experiments = Experiments.objects.filter(owner_id=owner_id)
+            plots = Plots.objects.filter(experiment_id__in=experiments)
+
+        # get plots by experiment
+        elif observation_id == "placeholder":
+            plots = Plots.objects.filter(experiment_id=experiment_id)
+
+        # get plots by observation
+        elif variable_id == "placeholder":
+            plots = Plots.objects.filter(experiment_id=experiment_id, observation_id=observation_id)
+
+        # get plots by variable
+        elif group_id == "placeholder":
+            plots = Plots.objects.filter(experiment_id=experiment_id, observation_id=observation_id, variable_id=variable_id)
+        
+        elif group_id != "":
+            plots = Plots.objects.filter(experiment=experiment_id,
+                                 group=group_id,
+                                 observation=observation_id,
+                                 variable=variable_id)
+
+        else:
+            return Response()
+            
+        serializer = PlotSerializer(plots, many=True)
+        return Response(serializer.data)
+
+    except ValueError as e:
+        return Response({"error": str(e)}, status=400)
+
+    except KeyError as e:
+        error_msg = "Missing request parameter detected: {}".format(str(e))
+        return Response({"error": error_msg}, status=400)
+
+    except ObjectDoesNotExist as e:
+        return Response({"error": str(e)}, status=400)
 
 @api_view(['GET'])
 def update_user_option(request):

@@ -2,7 +2,7 @@
     margin-top: 60px;
     display: flex;
 }
-  
+
 /* Styles for the dropdown menus container */
 .dropdown_container {
     margin-top: 30px;
@@ -17,4 +17,8 @@
     margin-left: 100px;
     width: 60%; /* Adjust width as needed */
     height: 300px;
+}
+
+.submit {
+    margin-top: 100px;
 }
