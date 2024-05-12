@@ -6,7 +6,10 @@ from api.models import *
 class TestEvagramInputTool(TestCase):
     @classmethod
     def setUpTestData(cls):
-        input_data(owner="postgres", experiment="experiment1", eva_directory="tests/eva")
+        input_data(owner="postgres",
+                   experiment="experiment1",
+                   eva_directory="tests/eva",
+                   test_local=True)
 
     def test_OwnerInSession(self):
         queryset = Owners.objects.filter(username="postgres")
@@ -19,16 +22,24 @@ class TestEvagramInputTool(TestCase):
 
     def test_WrongRootOwner(self):
         with self.assertRaises(Exception):
-            input_data(owner="test", experiment="experiment1", eva_directory="tests/eva")
+            input_data(owner="test",
+                       experiment="experiment1",
+                       eva_directory="tests/eva",
+                       test_local=True)
 
     def test_ExperimentPathNotFound(self):
         with self.assertRaises(FileNotFoundError):
-            input_data(owner="postgres", experiment="experiment1", eva_directory="not/a/path")
+            input_data(owner="postgres",
+                       experiment="experiment1",
+                       eva_directory="not/a/path",
+                       test_local=True)
 
     def test_RollbackOnException(self):
         with self.assertRaises(Exception):
-            input_data(
-                owner="postgres", experiment="bad_experiment", eva_directory="tests/dummy")
+            input_data(owner="postgres",
+                       experiment="bad_experiment",
+                       eva_directory="tests/dummy",
+                       test_local=True)
 
         owner = Owners.objects.get(username="postgres")
         experiments = Experiments.objects.filter(experiment_name="bad_experiment", owner=owner)
