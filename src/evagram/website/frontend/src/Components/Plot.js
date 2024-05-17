@@ -2,11 +2,11 @@ import { useEffect, useRef } from "react";
 import * as DOMPurify from "dompurify";
 
 function Plot({ div, script }) {
-    const scriptComponent = document.createElement("script");
     const bokehContainerRef = useRef(null);
 
     useEffect(() => {
         if (!bokehContainerRef.current) return;
+        const scriptComponent = document.createElement("script");
         const divContainer = bokehContainerRef.current;
         const divElement = document.createElement("div");
         const divContents = DOMPurify.sanitize(div);

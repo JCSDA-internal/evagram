@@ -2,32 +2,41 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Plot from "./Plot.js";
 
-function PlotList({ owner, experiment, group, observation, variable }) {
+function PlotList({
+    owner,
+    experiment,
+    observation,
+    variableName,
+    channel,
+    group,
+}) {
     const [plots, setPlots] = useState([]);
 
     useEffect(() => {
         if (
             owner !== "" &&
             experiment !== "" &&
-            group !== "" &&
             observation !== "" &&
-            variable !== ""
+            variableName !== "" &&
+            channel !== "" &&
+            group !== ""
         ) {
             axios
                 .get("http://localhost:8000/api/get-plots-by-field/", {
                     params: {
                         owner_id: owner,
                         experiment_id: experiment,
-                        group_id: group,
                         observation_id: observation,
-                        variable_id: variable,
+                        variable_name: variableName,
+                        channel: channel,
+                        group_id: group,
                     },
                 })
                 .then((response) => {
                     setPlots(response.data);
                 });
         }
-    }, [owner, experiment, group, observation, variable]);
+    }, [owner, experiment, observation, variableName, channel, group]);
     return (
         <div>
             {plots.map((plot) => (

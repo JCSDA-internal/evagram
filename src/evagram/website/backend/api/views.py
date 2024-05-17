@@ -62,31 +62,35 @@ def get_plots_by_field(request):
         owner_id = request.GET["owner_id"]
         experiment_id = request.GET["experiment_id"]
         observation_id = request.GET["observation_id"]
-        variable_id = request.GET["variable_id"]
+        variable_name = request.GET["variable_name"]
+        channel = request.GET["channel"]
         group_id = request.GET["group_id"]
 
-        # get plots by owner
-        if experiment_id == "placeholder":
+        # get plots by owner field
+        if experiment_id == "null":
             experiments = Experiments.objects.filter(owner_id=owner_id)
             plots = Plots.objects.filter(experiment_id__in=experiments)
 
-        # get plots by experiment
-        elif observation_id == "placeholder":
+        # get plots by experiment field
+        elif observation_id == "null":
             plots = Plots.objects.filter(experiment_id=experiment_id)
 
-        # get plots by observation
-        elif variable_id == "placeholder":
+        # get plots by observation field
+        elif variable_name == "null":
             plots = Plots.objects.filter(experiment_id=experiment_id, observation_id=observation_id)
 
-        # get plots by variable
-        elif group_id == "placeholder":
+        # get plots by variable field
+        elif group_id == "null":
+            # lookup variable id by variable name and channel
+            variable_id = Variables.objects.get(variable_name=variable_name, channel=channel).variable_id
             plots = Plots.objects.filter(experiment_id=experiment_id, observation_id=observation_id, variable_id=variable_id)
         
         elif group_id != "":
+            variable_id = Variables.objects.get(variable_name=variable_name, channel=channel)
             plots = Plots.objects.filter(experiment=experiment_id,
                                  group=group_id,
                                  observation=observation_id,
-                                 variable=variable_id)
+                                 variable_id=variable_id)
 
         else:
             return Response()
@@ -173,9 +177,14 @@ def update_observation_option(request):
         Observations.objects.get(pk=observation_id)
         data = {
             "variables": [],
-            "groups": []
+            "groups": [],
+            "variablesMap": {}
         }
         data["variables"] = get_variables_by_observation(observation_id)
+        variablesMap = {}
+        for variable in data["variables"]:
+            variablesMap[variable['variable_name']] = variablesMap.get(variable['variable_name'], []) + [variable['channel']]
+        data["variablesMap"] = variablesMap
         if len(data["variables"]) > 0:
             data["groups"] = get_groups_by_variable(data["variables"][0]["variable_id"])
         return Response(data)
@@ -194,10 +203,29 @@ def update_observation_option(request):
 @api_view(['GET'])
 def update_variable_option(request):
     try:
-        variable_id = request.GET["variable_id"]
-        Variables.objects.get(pk=variable_id)
+        variable_name = request.GET["variable_name"]
+        channel = request.GET["channel"]
+        variable_id = None
+
+        if channel == "null":
+            # check if variable does not include a channel by default, 
+            # otherwise it has not been configured yet in the PlotMenu
+            queryset = Variables.objects.filter(variable_name=variable_name, channel=None)
+            if len(queryset) == 1:
+                variable_id = queryset[0].variable_id
+            # pull the top channel from variable name
+            else:
+                queryset = Variables.objects.filter(variable_name=variable_name)
+                assert len(queryset) > 0
+                channel = queryset[0].channel
+                variable_id = queryset[0].variable_id
+        # get variable id from variable name and channel
+        else:
+            variable_id = Variables.objects.get(variable_name=variable_name, channel=channel).variable_id
+
         data = {
-            "groups": []
+            "groups": [],
+            "channel": channel
         }
         data["groups"] = get_groups_by_variable(variable_id)
         return Response(data)
