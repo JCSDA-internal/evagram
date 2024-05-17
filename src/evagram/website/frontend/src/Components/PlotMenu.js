@@ -18,6 +18,8 @@ function PlotMenu() {
     const [currentChannel, setCurrentChannel] = useState("null");
     const [currentGroup, setCurrentGroup] = useState("");
 
+    const [toggleChannel, setToggleChannel] = useState(false);
+
     const didMount = useRef(false);
 
     useEffect(() => {
@@ -49,6 +51,7 @@ function PlotMenu() {
         setExperiments([]);
         setObservations([]);
         setVariablesMap(new Map());
+        setToggleChannel(false);
         setGroups([]);
         if (e.target.value !== "null") {
             axios
@@ -68,6 +71,7 @@ function PlotMenu() {
         if (e.target.value === "null") {
             setObservations([]);
             setVariablesMap(new Map());
+            setToggleChannel(false);
             setGroups([]);
         } else {
             //setCurrentGroup("");
@@ -87,6 +91,7 @@ function PlotMenu() {
     const updateOptionsByObservation = (e) => {
         if (e.target.value === "null") {
             setVariablesMap(new Map());
+            setToggleChannel(false);
             setGroups([]);
         } else {
             axios
@@ -104,14 +109,19 @@ function PlotMenu() {
 
     const updateOptionsByVariableName = (e) => {
         if (e.target.value === "null") {
+            setToggleChannel(false);
             setGroups([]);
         } else {
-            // channel has been configured properly
+            setToggleChannel(true);
+            var channel = "null";
+            if (variablesMap[e.target.value][0] !== null) {
+                channel = variablesMap[e.target.value][0];
+            }
             axios
                 .get("http://localhost:8000/api/update-variable-option/", {
                     params: {
                         variable_name: e.target.value,
-                        channel: document.getElementById("channel_menu").value,
+                        channel: channel,
                     },
                 })
                 .then((response) => {
@@ -122,7 +132,6 @@ function PlotMenu() {
     };
 
     const updateOptionsByChannel = (e) => {
-        console.log(e.target.value);
         if (e.target.value === "null") {
             setGroups([]);
         } else {
@@ -168,6 +177,7 @@ function PlotMenu() {
                     updateOptionsByVariableName={updateOptionsByVariableName}
                     updateOptionsByChannel={updateOptionsByChannel}
                     variablesMap={variablesMap}
+                    toggleChannel={toggleChannel}
                 />
                 <label>Group:</label>
                 <DropdownList id="group_menu" objects={groups} />

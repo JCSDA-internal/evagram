@@ -1,3 +1,5 @@
+import React from "react";
+
 function DropdownList({ id, updateOptionCallback, objects }) {
     return (
         <select id={id} onChange={updateOptionCallback}>
@@ -11,4 +13,4 @@ function DropdownList({ id, updateOptionCallback, objects }) {
     );
 }
 
-export default DropdownList;
+export default React.memo(DropdownList);

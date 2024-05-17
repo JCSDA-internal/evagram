@@ -82,10 +82,14 @@ def get_plots_by_field(request):
         # get plots by variable field
         elif group_id == "null":
             # lookup variable id by variable name and channel
+            if channel == "null":
+                channel = None
             variable_id = Variables.objects.get(variable_name=variable_name, channel=channel).variable_id
             plots = Plots.objects.filter(experiment_id=experiment_id, observation_id=observation_id, variable_id=variable_id)
         
         elif group_id != "":
+            if channel == "null":
+                channel = None
             variable_id = Variables.objects.get(variable_name=variable_name, channel=channel)
             plots = Plots.objects.filter(experiment=experiment_id,
                                  group=group_id,

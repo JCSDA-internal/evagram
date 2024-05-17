@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import styles from "../styles/VariableDropdownList.module.css";
 
@@ -6,10 +7,11 @@ function VariableDropdownList({
     updateOptionsByVariableName,
     updateOptionsByChannel,
     variablesMap,
+    toggleChannel,
 }) {
     const [variableName, setVariableName] = useState("--");
 
-    // console.log("Variables Map", variablesMap.size);
+    // console.log("Variables Map", variablesMap, variableName);
 
     const handleChange = (e) => {
         updateOptionsByVariableName(e);
@@ -24,7 +26,7 @@ function VariableDropdownList({
     useEffect(() => {
         var variableMenu = document.getElementById(id);
         setVariableName(variableMenu.options[variableMenu.selectedIndex].text);
-    }, [variablesMap]);
+    }, [id, variablesMap]);
 
     return (
         <div className={styles.variable_dropdown}>
@@ -38,7 +40,7 @@ function VariableDropdownList({
                       ))
                     : null}
             </select>
-            {variableName !== "--" && Object.keys(variablesMap).length > 0 ? (
+            {toggleChannel && variablesMap[variableName][0] !== null ? (
                 <>
                     <div className={styles.variable_dropdown}>
                         <label>Channel:</label>
@@ -46,19 +48,11 @@ function VariableDropdownList({
                             id="channel_menu"
                             onChange={updateOptionsByChannel}
                         >
-                            {variableName in variablesMap ? (
-                                variablesMap[variableName].map((channel) => (
-                                    <option key={channel} value={channel}>
-                                        {channel}
-                                    </option>
-                                ))
-                            ) : (
-                                <input
-                                    type="hidden"
-                                    id="channel_menu"
-                                    value={"null"}
-                                />
-                            )}
+                            {variablesMap[variableName].map((channel) => (
+                                <option key={channel} value={channel}>
+                                    {channel}
+                                </option>
+                            ))}
                         </select>
                     </div>
                 </>
@@ -69,4 +63,4 @@ function VariableDropdownList({
     );
 }
 
-export default VariableDropdownList;
+export default React.memo(VariableDropdownList);

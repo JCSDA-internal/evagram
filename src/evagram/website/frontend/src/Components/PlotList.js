@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Plot from "./Plot.js";
@@ -46,4 +47,4 @@ function PlotList({
     );
 }
 
-export default PlotList;
+export default React.memo(PlotList);
