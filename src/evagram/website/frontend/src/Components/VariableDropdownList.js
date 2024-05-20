@@ -43,7 +43,7 @@ function VariableDropdownList({
             {toggleChannel && variablesMap[variableName][0] !== null ? (
                 <>
                     <div className={styles.variable_dropdown}>
-                        <label>Channel:</label>
+                        {/* <label>Channel:</label> */}
                         <select
                             id="channel_menu"
                             onChange={updateOptionsByChannel}

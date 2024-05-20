@@ -66,8 +66,15 @@ def get_plots_by_field(request):
         channel = request.GET["channel"]
         group_id = request.GET["group_id"]
 
+        plots = Plots.objects.none()
+
+        # invalid input
+        if owner_id == "null":
+            serializer = PlotSerializer(plots, many=True)
+            return Response(serializer.data)
+
         # get plots by owner field
-        if experiment_id == "null":
+        elif experiment_id == "null":
             experiments = Experiments.objects.filter(owner_id=owner_id)
             plots = Plots.objects.filter(experiment_id__in=experiments)
 
@@ -95,10 +102,7 @@ def get_plots_by_field(request):
                                  group=group_id,
                                  observation=observation_id,
                                  variable_id=variable_id)
-
-        else:
-            return Response()
-            
+  
         serializer = PlotSerializer(plots, many=True)
         return Response(serializer.data)
 

@@ -68,12 +68,11 @@ function PlotMenu() {
     };
 
     const updateOptionsByExperiment = (e) => {
-        if (e.target.value === "null") {
-            setObservations([]);
-            setVariablesMap(new Map());
-            setToggleChannel(false);
-            setGroups([]);
-        } else {
+        setObservations([]);
+        setVariablesMap(new Map());
+        setToggleChannel(false);
+        setGroups([]);
+        if (e.target.value !== "null") {
             //setCurrentGroup("");
             axios
                 .get("http://localhost:8000/api/update-experiment-option/", {
@@ -89,11 +88,10 @@ function PlotMenu() {
     };
 
     const updateOptionsByObservation = (e) => {
-        if (e.target.value === "null") {
-            setVariablesMap(new Map());
-            setToggleChannel(false);
-            setGroups([]);
-        } else {
+        setVariablesMap(new Map());
+        setToggleChannel(false);
+        setGroups([]);
+        if (e.target.value !== "null") {
             axios
                 .get("http://localhost:8000/api/update-observation-option/", {
                     params: {
@@ -108,10 +106,9 @@ function PlotMenu() {
     };
 
     const updateOptionsByVariableName = (e) => {
-        if (e.target.value === "null") {
-            setToggleChannel(false);
-            setGroups([]);
-        } else {
+        setToggleChannel(false);
+        setGroups([]);
+        if (e.target.value !== "null") {
             setToggleChannel(true);
             var channel = "null";
             if (variablesMap[e.target.value][0] !== null) {
@@ -132,9 +129,8 @@ function PlotMenu() {
     };
 
     const updateOptionsByChannel = (e) => {
-        if (e.target.value === "null") {
-            setGroups([]);
-        } else {
+        setGroups([]);
+        if (e.target.value !== "null") {
             axios
                 .get("http://localhost:8000/api/update-variable-option/", {
                     params: {
