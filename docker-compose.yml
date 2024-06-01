@@ -1,0 +1,37 @@
+version: "3.8"
+services:
+  database:
+    platform: 'linux/amd64'
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: $DB_PASSWORD
+      POSTGRES_DB: evagram
+    volumes:
+      - evagram:/var/lib/postgresql/data/
+
+  backend:
+    restart: always
+    platform: 'linux/amd64'
+    build: src/evagram/website/backend
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py loaddata api/fixtures/test_data.json
+             python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - 8000:8000
+    environment:
+      DB_HOST: database
+      DB_PASSWORD: $DB_PASSWORD
+    depends_on:
+      - database
+  
+  frontend:
+    build: src/evagram/website/frontend
+    ports:
+      - 3000:3000
+
+volumes:
+  evagram:
