@@ -36,4 +36,5 @@ jobs:
       - name: Run Django API Tests
         run: python src/evagram/website/backend/manage.py test api
         env:
+          DB_HOST: 127.0.0.1
           DB_PASSWORD: ${{secrets.DB_PASSWORD}}
