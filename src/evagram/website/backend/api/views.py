@@ -30,32 +30,6 @@ def initial_load(request):
         data["groups"] = get_groups_by_variable(first_variable)
     return Response(data)
 
-
-@api_view(['GET'])
-def get_plot_components(request):
-    try:
-        experiment_id = request.GET["experiment_id"]
-        observation_id = request.GET["observation_id"]
-        variable_id = request.GET["variable_id"]
-        group_id = request.GET["group_id"]
-
-        plot = Plots.objects.get(experiment=experiment_id,
-                                 group=group_id,
-                                 observation=observation_id,
-                                 variable=variable_id)
-        serializer = PlotSerializer(plot)
-        return Response(serializer.data)
-
-    except ValueError as e:
-        return Response({"error": str(e)}, status=400)
-
-    except KeyError as e:
-        error_msg = "Missing request parameter detected: {}".format(str(e))
-        return Response({"error": error_msg}, status=400)
-
-    except ObjectDoesNotExist as e:
-        return Response({"error": str(e)}, status=400)
-
 @api_view(['GET'])
 def get_plots_by_field(request):
     try:

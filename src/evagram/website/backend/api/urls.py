@@ -3,7 +3,6 @@ from . import views
 
 urlpatterns = [
     path("initial-load/", views.initial_load),
-    path("get-plot-components/", views.get_plot_components),
     path("get-plots-by-field/", views.get_plots_by_field),
     path("update-user-option/", views.update_user_option),
     path("update-experiment-option/", views.update_experiment_option),

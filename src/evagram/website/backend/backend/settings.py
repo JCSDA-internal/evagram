@@ -89,7 +89,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'evagram',
+        'NAME': 'test_evagram',
         'USER': 'postgres',
         'PORT': 5432,
         'HOST': pg_host,
