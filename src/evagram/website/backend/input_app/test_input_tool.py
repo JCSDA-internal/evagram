@@ -27,8 +27,7 @@ class TestEvagramInputTool(TestCase):
 
     def test_RollbackOnException(self):
         with self.assertRaises(Exception):
-            input_data(
-              owner="postgres", experiment="bad_experiment", eva_directory="tests/dummy")
+            input_data(owner="postgres", experiment="bad_experiment", eva_directory="tests/dummy")
 
         owner = Owners.objects.get(username="postgres")
         experiments = Experiments.objects.filter(experiment_name="bad_experiment", owner=owner)
