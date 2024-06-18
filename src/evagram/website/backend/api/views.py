@@ -30,6 +30,7 @@ def initial_load(request):
         data["groups"] = get_groups_by_variable(first_variable)
     return Response(data)
 
+
 @api_view(['GET'])
 def get_plots_by_field(request):
     try:
@@ -65,18 +66,20 @@ def get_plots_by_field(request):
             # lookup variable id by variable name and channel
             if channel == "null":
                 channel = None
-            variable_id = Variables.objects.get(variable_name=variable_name, channel=channel).variable_id
-            plots = Plots.objects.filter(experiment_id=experiment_id, observation_id=observation_id, variable_id=variable_id)
-        
+            variable_id = Variables.objects.get(
+                variable_name=variable_name, channel=channel).variable_id
+            plots = Plots.objects.filter(
+                experiment_id=experiment_id, observation_id=observation_id, variable_id=variable_id)
+
         elif group_id != "":
             if channel == "null":
                 channel = None
             variable_id = Variables.objects.get(variable_name=variable_name, channel=channel)
             plots = Plots.objects.filter(experiment=experiment_id,
-                                 group=group_id,
-                                 observation=observation_id,
-                                 variable_id=variable_id)
-  
+                                         group=group_id,
+                                         observation=observation_id,
+                                         variable_id=variable_id)
+
         serializer = PlotSerializer(plots, many=True)
         return Response(serializer.data)
 
@@ -89,6 +92,7 @@ def get_plots_by_field(request):
 
     except ObjectDoesNotExist as e:
         return Response({"error": str(e)}, status=400)
+
 
 @api_view(['GET'])
 def update_user_option(request):
@@ -165,7 +169,8 @@ def update_observation_option(request):
         data["variables"] = get_variables_by_observation(observation_id)
         variablesMap = {}
         for variable in data["variables"]:
-            variablesMap[variable['variable_name']] = variablesMap.get(variable['variable_name'], []) + [variable['channel']]
+            variablesMap[variable['variable_name']] = variablesMap.get(
+                variable['variable_name'], []) + [variable['channel']]
         data["variablesMap"] = variablesMap
         if len(data["variables"]) > 0:
             data["groups"] = get_groups_by_variable(data["variables"][0]["variable_id"])
@@ -190,7 +195,7 @@ def update_variable_option(request):
         variable_id = None
 
         if channel == "null":
-            # check if variable does not include a channel by default, 
+            # check if variable does not include a channel by default,
             # otherwise it has not been configured yet in the PlotMenu
             queryset = Variables.objects.filter(variable_name=variable_name, channel=None)
             if len(queryset) == 1:
@@ -203,7 +208,8 @@ def update_variable_option(request):
                 variable_id = queryset[0].variable_id
         # get variable id from variable name and channel
         else:
-            variable_id = Variables.objects.get(variable_name=variable_name, channel=channel).variable_id
+            variable_id = Variables.objects.get(
+                variable_name=variable_name, channel=channel).variable_id
 
         data = {
             "groups": [],

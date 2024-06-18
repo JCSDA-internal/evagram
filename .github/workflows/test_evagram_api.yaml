@@ -33,6 +33,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install . -r requirements.txt
 
+      - name: Create PGPASS File
+        run: |
+          echo 127.0.0.1:5432:test_evagram:postgres:${{secrets.DB_PASSWORD}} >> ~/.pgpass
+          chmod 600 ~/.pgpass
+          export PGPASSFILE='/home/runner/.pgpass'
+
       - name: Run Django API Tests
         run: python src/evagram/website/backend/manage.py test api
         env:

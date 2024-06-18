@@ -3,7 +3,6 @@ from api.models import *
 from django.db import models
 
 
-
 class OwnerSerializer(serializers.ModelSerializer):
     key = serializers.ModelField(model_field=Owners()._meta.get_field('owner_id'))
     value = serializers.ModelField(model_field=Owners()._meta.get_field('owner_id'))
