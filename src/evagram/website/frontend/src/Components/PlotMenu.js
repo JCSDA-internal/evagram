@@ -101,6 +101,7 @@ function PlotMenu() {
       axios
         .get("http://localhost:8000/api/update-observation-option/", {
           params: {
+            experiment_id: document.getElementById("experiment_menu").value,
             observation_id: e.target.value,
           },
         })
@@ -123,6 +124,8 @@ function PlotMenu() {
       axios
         .get("http://localhost:8000/api/update-variable-option/", {
           params: {
+            experiment_id: document.getElementById("experiment_menu").value,
+            observation_id: document.getElementById("observation_menu").value,
             variable_name: e.target.value,
             channel: channel,
           },
@@ -140,6 +143,8 @@ function PlotMenu() {
       axios
         .get("http://localhost:8000/api/update-variable-option/", {
           params: {
+            experiment_id: document.getElementById("experiment_menu").value,
+            observation_id: document.getElementById("observation_menu").value,
             variable_name: document.getElementById("variable_menu").value,
             channel: e.target.value,
           },
