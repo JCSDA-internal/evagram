@@ -140,16 +140,18 @@ class TestAPIView(TestCase):
         self.assertEqual(400, response.status_code)
 
     def test_update_observation_option_valid_params(self):
-        response = self.client.get("/api/update-observation-option/?observation_id=1")
-        self.assertEqual("observation_id=1", response.request['QUERY_STRING'])
+        response = self.client.get("/api/update-observation-option/"
+                                   "?experiment_id=12&observation_id=1")
+        self.assertEqual("experiment_id=12&observation_id=1", response.request['QUERY_STRING'])
         self.assertEqual(200, response.status_code)
         self.assertTrue("groups" in response.json())
         self.assertTrue("variables" in response.json())
         self.assertTrue("variablesMap" in response.json())
 
     def test_update_observation_option_object_not_found(self):
-        response = self.client.get("/api/update-observation-option/?observation_id=-1")
-        self.assertEqual("observation_id=-1", response.request['QUERY_STRING'])
+        response = self.client.get("/api/update-observation-option/"
+                                   "?experiment_id=1&observation_id=-1")
+        self.assertEqual("experiment_id=1&observation_id=-1", response.request['QUERY_STRING'])
         self.assertEqual(404, response.status_code)
 
     def test_update_observation_option_value_error(self):
@@ -164,17 +166,22 @@ class TestAPIView(TestCase):
 
     def test_update_variable_option_valid_params(self):
         response = self.client.get(
-            "/api/update-variable-option/?variable_name=brightnessTemperature&channel=4")
-        self.assertEqual("variable_name=brightnessTemperature"
-                         "&channel=4", response.request['QUERY_STRING'])
+            "/api/update-variable-option/?experiment_id=12&observation_id=1&"
+            "variable_name=brightnessTemperature&channel=4")
+        self.assertEqual("experiment_id=12&observation_id=1"
+                         "&variable_name=brightnessTemperature&channel=4",
+                         response.request['QUERY_STRING'])
         self.assertEqual(200, response.status_code)
         self.assertTrue("groups" in response.json())
         self.assertTrue("channel" in response.json())
 
     def test_update_variable_option_object_not_found(self):
         response = self.client.get(
-            "/api/update-variable-option/?variable_name=variable&channel=null")
-        self.assertEqual("variable_name=variable&channel=null", response.request['QUERY_STRING'])
+            "/api/update-variable-option/?experiment_id=12&observation_id=1&"
+            "variable_name=variable&channel=null")
+        self.assertEqual("experiment_id=12&observation_id=1&"
+                         "variable_name=variable&channel=null",
+                         response.request['QUERY_STRING'])
         self.assertEqual(404, response.status_code)
 
     def test_update_variable_option_insufficient_params(self):
