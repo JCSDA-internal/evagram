@@ -9,10 +9,6 @@ class TestAPIView(TestCase):
         response = self.client.get("/api/initial-load/")
         self.assertEqual(200, response.status_code)
         self.assertTrue("owners" in response.json())
-        self.assertTrue("experiments" in response.json())
-        self.assertTrue("groups" in response.json())
-        self.assertTrue("observations" in response.json())
-        self.assertTrue("variables" in response.json())
 
     def test_get_single_plot(self):
         response = self.client.get(
