@@ -35,9 +35,6 @@ function PlotMenu() {
       .get("http://localhost:8000/api/initial-load/")
       .then((response) => {
         setOwners(response.data["owners"]);
-        setExperiments(response.data["experiments"]);
-        // setGroups(response.data["groups"]);
-        // setObservations(response.data["observations"]);
         didMount.current = true;
       })
       .catch((error) => console.log(error));

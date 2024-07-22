@@ -9,25 +9,9 @@ from django.core.exceptions import ObjectDoesNotExist
 @api_view(['GET'])
 def initial_load(request):
     data = {
-        "owners": [],
-        "experiments": [],
-        "groups": [],
-        "observations": [],
-        "variables": []
+        "owners": []
     }
     data["owners"] = get_owners()
-    if len(data["owners"]) > 0:
-        first_owner = data["owners"][0]["owner_id"]
-        data["experiments"] = get_experiments_by_owner(first_owner)
-    if len(data["experiments"]) > 0:
-        first_experiment = data["experiments"][0]["experiment_id"]
-        data["observations"] = get_observations_by_experiment(first_experiment)
-    if len(data["observations"]) > 0:
-        first_observation = data["observations"][0]["observation_id"]
-        data["variables"] = get_variables_by_observation(first_experiment, first_observation)
-    if len(data["variables"]) > 0:
-        first_variable = data["variables"][0]["variable_id"]
-        data["groups"] = get_groups_by_variable(first_experiment, first_observation, first_variable)
     return Response(data)
 
 
