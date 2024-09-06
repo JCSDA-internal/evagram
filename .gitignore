@@ -135,3 +135,9 @@ dmypy.json
 *.swo
 ._*
 
+# Front-end build files
+node_modules/
+
+# ignore identifier files
+*Zone.Identifier
+

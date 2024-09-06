@@ -1,6 +1,5 @@
 import React from "react";
 import { useEffect, useState } from "react";
-import styles from "../styles/VariableDropdownList.module.css";
 
 /*
 The VariableDropdownList is similar to the DropdownList component but is used exclusively for the
@@ -35,8 +34,13 @@ function VariableDropdownList({
   }, [id, variablesMap, toggleVariableName]);
 
   return (
-    <div className={styles.variable_dropdown}>
-      <select id={id} onChange={(e) => handleChange(e)}>
+    <div className="flex flex-col">
+      {/* styling for variable drop down here */}
+      <select
+        id={id}
+        onChange={(e) => handleChange(e)}
+        className="bg-[#cccfd3] bg-opacity-100 m-1.5 flex w-36 rounded-md"
+      >
         <option value="null">--</option>
         {Object.keys(variablesMap).length > 0
           ? Object.keys(variablesMap).map((variable) => (
@@ -48,9 +52,14 @@ function VariableDropdownList({
       </select>
       {toggleChannel && variablesMap[variableName][0] !== null ? (
         <>
-          <div className={styles.variable_dropdown}>
-            {/* <label>Channel:</label> */}
-            <select id="channel_menu" onChange={updateOptionsByChannel}>
+          {/* styling for variable drop down here */}
+          <div>
+            <label className="font-body font-bold text-black">Channel:</label>
+            <select
+              className="bg-[#cccfd3] bg-opacity-100 shadow-lg m-1.5 flex w-36 rounded-md"
+              id="channel_menu"
+              onChange={updateOptionsByChannel}
+            >
               {variablesMap[variableName].map((channel) => (
                 <option key={channel} value={channel}>
                   {channel}

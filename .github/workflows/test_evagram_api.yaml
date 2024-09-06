@@ -14,7 +14,7 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_PASSWORD: ${{secrets.DB_PASSWORD}}
+          POSTGRES_PASSWORD: postgres
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
@@ -36,5 +36,4 @@ jobs:
       - name: Run Django API Tests
         run: python src/evagram/website/backend/manage.py test api
         env:
-          DB_HOST: 127.0.0.1
           DB_PASSWORD: ${{secrets.DB_PASSWORD}}
